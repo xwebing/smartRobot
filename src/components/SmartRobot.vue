@@ -3,6 +3,7 @@
     <div class="header">header</div>
     <div class="content" ref="refChatMessage">
       <div v-for="(item, index) in robotMsg" :key="index">
+        <!-- 引导语 -->
         <!-- robot -->
         <!-- user -->
         <ChatItem v-bind="{ item }" />
@@ -20,6 +21,7 @@ import { useRobotMsgStore } from '@/stores'
 import { watch, ref, nextTick } from 'vue'
 import UserTools from './tools/UserTools.vue'
 import UserInput from './input/UserInput.vue'
+import HelloWord from './chat/HelloWord.vue'
 import ChatItem from './chat/ChatItem.vue'
 
 const { robotMsg } = useRobotMsgStore()
@@ -45,37 +47,42 @@ watch(
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.72);
   display: flex;
   flex-direction: column;
-  background: url('@/assets/robot-bg.jpg') no-repeat;
+  background: url('@/assets/robot-bg.png') no-repeat;
   background-position: center;
   background-size: cover;
   padding-bottom: 12px;
 
-  background-image: linear-gradient(#ededed, #b5d1e3, #09f);
-  color: #191919;
+  /* background-image: linear-gradient(#ededed, #b5d1e3, #09f); */
+  color: #40485b;
 }
 .header {
   display: flex;
   align-items: center;
   height: 48px;
-  background-image: linear-gradient(#ededed);
-  padding: 0 16px;
+  padding: 0 12px;
+  color: #fff;
+  position: absolute;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
 }
 .content {
   /* min-height: calc(100% - 48px - 100px - 16px); */
-  height: calc(100% - 48px - 48px - 16px - 22px);
+  padding-top: 60px;
+  height: calc(100% - 48px - 35px - 12px);
   overflow-x: hidden;
   overflow-y: auto;
-  padding-bottom: 16px;
   scroll-behavior: smooth;
   white-space: break-spaces;
   word-wrap: break-word; /* 使得长单词或数字可以换行 */
   overflow-wrap: break-word; /* 确保兼容性 */
   word-break: break-all;
-  padding-right: 16px;
-  padding-left: 16px;
+  padding-right: 12px;
+  padding-left: 12px;
+  padding-bottom: 24px;
 }
 .footer {
-  padding: 0 16px;
+  padding: 0 12px;
 }
 </style>
 <style>

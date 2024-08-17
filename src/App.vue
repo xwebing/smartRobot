@@ -14,4 +14,8 @@ body,
   padding: 0;
   margin: 0;
 }
+.robot {
+  display: flex;
+  margin-left: auto;
+}
 </style>

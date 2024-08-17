@@ -1,15 +1,23 @@
 <template>
   <div class="user-tools">
-    <button class="tool-select-temp"><i class="icon-temp"></i></button>
-    <button class="tools-stop"><i class="icon-stop"></i></button>
-    <button class="tools-bottom"><i class="icon-buttom"></i></button>
+    <div class="tools-wrap">
+      <button class="tool-select-temp"><i class="icon-temp"></i></button>
+      <button class="tools-stop"><i class="icon-stop"></i></button>
+      <button class="tools-bottom"><i class="icon-buttom"></i></button>
+    </div>
   </div>
 </template>
 
 <style lang="less" scoped>
 .user-tools {
   display: flex;
-  margin-bottom: 8px;
+  position: relative;
+  .tools-wrap {
+    position: absolute;
+    top: -30px;
+    display: flex;
+    width: 100%;
+  }
   .tool-select-temp {
     background-color: #fff;
     border: 1px solid transparent;
