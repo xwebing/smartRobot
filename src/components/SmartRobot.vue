@@ -2,54 +2,39 @@
   <div class="robot">
     <div class="header">header</div>
     <div class="content" ref="refChatMessage">
-      <div v-for="(item, index) in chartMessage" :key="index">
-        <div class="chat">{{ item }}</div>
+      <div v-for="(item, index) in robotMsg" :key="index">
+        <!-- robot -->
+        <!-- user -->
+        <ChatItem v-bind="{ item }" />
       </div>
     </div>
-    <div class="user-fns">
-      <button>选择模板</button>
-      <button>停止运行</button>
-      <button>回到底部</button>
-    </div>
+
     <div class="footer">
-      <textarea
-        v-model="msg"
-        @keydown.enter="btnSend"
-        @focus="btnFocus"
-        @blur="btnBlur"
-        :class="{ 'user-input-start': isFocus }"
-      ></textarea>
+      <UserTools />
+      <UserInput />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, nextTick } from 'vue'
-const msg = ref('')
-const chartMessage = reactive<string[]>([])
+import { useRobotMsgStore } from '@/stores'
+import { watch, ref, nextTick } from 'vue'
+import UserTools from './tools/UserTools.vue'
+import UserInput from './input/UserInput.vue'
+import ChatItem from './chat/ChatItem.vue'
+
+const { robotMsg } = useRobotMsgStore()
 
 const refChatMessage = ref()
-const btnSend = async () => {
-  chartMessage.push(msg.value)
-  await nextTick()
-  console.log(refChatMessage)
-  refChatMessage.value.scrollTop = refChatMessage.value.scrollHeight
-}
-
-const isFocus = ref(false)
-const btnFocus = () => {
-  isFocus.value = true
-}
-const btnBlur = () => {
-  isFocus.value = false
-}
+watch(
+  () => robotMsg.length,
+  async () => {
+    await nextTick()
+    refChatMessage.value.scrollTop = refChatMessage.value.scrollHeight
+  }
+)
 </script>
 
 <style scoped>
-.smart-robot {
-  position: relative;
-  display: flex;
-  margin-left: auto;
-}
 .robot {
   position: relative;
   box-sizing: border-box;
@@ -63,7 +48,7 @@ const btnBlur = () => {
   background: url('@/assets/robot-bg.jpg') no-repeat;
   background-position: center;
   background-size: cover;
-  padding: 0 16px 16px 16px;
+  padding-bottom: 12px;
 
   background-image: linear-gradient(#ededed, #b5d1e3, #09f);
   color: #191919;
@@ -73,6 +58,7 @@ const btnBlur = () => {
   align-items: center;
   height: 48px;
   background-image: linear-gradient(#ededed);
+  padding: 0 16px;
 }
 .content {
   /* min-height: calc(100% - 48px - 100px - 16px); */
@@ -85,25 +71,14 @@ const btnBlur = () => {
   word-wrap: break-word; /* 使得长单词或数字可以换行 */
   overflow-wrap: break-word; /* 确保兼容性 */
   word-break: break-all;
+  padding-right: 16px;
+  padding-left: 16px;
 }
-.content .chat {
-  background-color: #fff;
-  padding: 16px;
-  margin-bottom: 16px;
-  width: fit-content;
-  border-radius: 6px;
+.footer {
+  padding: 0 16px;
 }
-.footer textarea {
-  width: 100%;
-  height: 48px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: height 0.3s;
-}
-.footer .user-input-start {
-  height: 100px;
-}
-
+</style>
+<style>
 /* 自定义整个滚动条 */
 ::-webkit-scrollbar {
   width: 6px; /* 设置滚动条的宽度 */
@@ -111,8 +86,8 @@ const btnBlur = () => {
 
 /* 自定义滚动条轨道 */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; /* 设置轨道的背景颜色 */
   border-radius: 6px;
+  background-color: transparent;
 }
 
 /* 自定义滚动条的滑块（thumb） */
