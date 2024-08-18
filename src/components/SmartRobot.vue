@@ -11,29 +11,32 @@
     </div>
 
     <div class="footer">
-      <UserTools />
-      <UserInput />
+      <UserTools v-bind="{ refChatMessage }" />
+      <UserInput v-bind="{ refChatMessage }" @scrollToButtom="scrollToButtom" />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { useRobotMsgStore } from '@/stores'
-import { watch, ref, nextTick } from 'vue'
+import { ref } from 'vue'
 import UserTools from './tools/UserTools.vue'
 import UserInput from './input/UserInput.vue'
-import HelloWord from './chat/HelloWord.vue'
 import ChatItem from './chat/ChatItem.vue'
 
 const { robotMsg } = useRobotMsgStore()
 
 const refChatMessage = ref()
-watch(
-  () => robotMsg.length,
-  async () => {
-    await nextTick()
-    refChatMessage.value.scrollTop = refChatMessage.value.scrollHeight
-  }
-)
+
+// watch(
+//   () => robotMsg.length,
+//   async () => {
+//     await nextTick()
+//     refChatMessage.value.scrollTop = refChatMessage.value.scrollHeight
+//   }
+// )
+function scrollToButtom() {
+  refChatMessage.value.scrollTop = refChatMessage.value.scrollHeight
+}
 </script>
 
 <style scoped>
@@ -63,8 +66,9 @@ watch(
   color: #fff;
   position: absolute;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 1);
   box-sizing: border-box;
+  z-index: 1000;
 }
 .content {
   /* min-height: calc(100% - 48px - 100px - 16px); */

@@ -1,12 +1,64 @@
 <template>
   <div class="user-tools">
     <div class="tools-wrap">
-      <button class="tool-select-temp"><i class="icon-temp"></i></button>
+      <button @click="btnClear" class="tool-select-temp"><i class="icon-temp"></i></button>
       <button class="tools-stop"><i class="icon-stop"></i></button>
       <button class="tools-bottom"><i class="icon-buttom"></i></button>
     </div>
   </div>
 </template>
+
+<script lang="ts" setup>
+import { nextTick } from 'vue'
+import { useRobotMsgStore } from '@/stores'
+
+const props = defineProps<{ refChatMessage: Element }>()
+
+const store = useRobotMsgStore()
+
+const getAllItemTotalHeight = () => {
+  const itemTotal = document.querySelectorAll('.content .chat')
+  let total = 0
+  for (const item of itemTotal) {
+    total += item.getBoundingClientRect().height + 12
+  }
+  return total
+}
+
+const getLastItemTop = () => {
+  const itemTotal = document.querySelectorAll('.content .chat')
+  const lastItem = itemTotal[itemTotal.length - 1]
+  return lastItem.getBoundingClientRect().top
+}
+
+const btnClear = async () => {
+  store.robotMsgFnPush(store.HelloWord)
+  await nextTick()
+  // const allItemHeight = getAllItemTotalHeight()
+  // const scrollHeight = props.refChatMessage.scrollHeight
+  const lastTop = getLastItemTop()
+  props.refChatMessage.getAnimations().forEach((ani) => ani.cancel())
+  const domAni = props.refChatMessage.animate(
+    [
+      {
+        transform: 'translateY(0px)'
+      },
+      {
+        transform: `translateY(-${lastTop - 48 - 12}px)`
+      }
+    ],
+    {
+      duration: 500
+      // fill: 'forwards'
+    }
+  )
+  domAni.finished.then(() => {
+    nextTick(() => {
+      store.clearMsg()
+    })
+  })
+}
+</script>
 
 <style lang="less" scoped>
 .user-tools {
