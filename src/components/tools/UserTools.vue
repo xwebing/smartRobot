@@ -116,7 +116,7 @@ const btnClear = async () => {
       display: inline-flex;
       width: 12px;
       height: 12px;
-      background-image: url('@/ssets/svg/tools/icon-stop.svg');
+      background-image: url('@/assets/svg/tools/icon-stop.svg');
       background-color: #666;
       mask: url('@/assets/svg/tools/icon-stop.svg');
       mask-size: 100% 100%;
@@ -146,7 +146,7 @@ const btnClear = async () => {
       display: inline-flex;
       width: 12px;
       height: 12px;
-      background-image: url('@/ssets/svg/tools/icon-buttom.svg');
+      background-image: url('@/assets/svg/tools/icon-buttom.svg');
       background-color: #666;
       mask: url('@/assets/svg/tools/icon-buttom.svg');
       mask-size: 100% 100%;
