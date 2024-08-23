@@ -3,11 +3,9 @@
     <textarea
       v-model="msg"
       @keydown.enter="btnSend"
-      @focus="btnFocus"
-      @blur="btnBlur"
       placeholder="Ask me anything...(Shift + Enter = line break)"
       spellcheck="false"
-      :class="{ 'user-input-start': isFocus }"
+      class="user-input-textarea"
     ></textarea>
   </div>
 </template>
@@ -55,18 +53,10 @@ const btnSend = async () => {
   emit('scrollToButtom')
 }
 
-const isFocus = ref(false)
-const btnFocus = () => {
-  isFocus.value = true
-}
-const btnBlur = () => {
-  isFocus.value = false
-}
 </script>
-<style scoped>
+<style lang="less" scoped>
 .user-input textarea {
   width: 100%;
-  height: 35px;
   overflow-y: auto;
   overflow-x: hidden;
   transition: height 0.3s;
@@ -77,8 +67,13 @@ const btnBlur = () => {
   box-sizing: border-box;
   font-size: 14px;
   line-height: 20px;
-}
-.user-input .user-input-start {
-  height: 100px;
+  &:not(:focus) {
+    height: 35px;
+    transition: height .9s;
+  }
+  &:focus {
+    height: 100px;
+    transition: height 0.3s;
+  }
 }
 </style>
