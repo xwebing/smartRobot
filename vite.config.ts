@@ -7,6 +7,10 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/smartRobot',
+  build: {
+    outDir: './docs'
+  },
   plugins: [
     vue(),
     vueJsx(),
