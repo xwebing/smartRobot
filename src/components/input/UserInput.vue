@@ -7,6 +7,7 @@
       spellcheck="false"
       class="user-input-textarea"
     ></textarea>
+    <div class="robot-send">icon</div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -55,25 +56,52 @@ const btnSend = async () => {
 
 </script>
 <style lang="less" scoped>
-.user-input textarea {
-  width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: height 0.3s;
-  padding: 6px;
-  border-radius: 6px;
-  outline: none;
-  resize: none;
-  box-sizing: border-box;
-  font-size: 14px;
-  line-height: 20px;
-  &:not(:focus) {
-    height: 35px;
-    transition: height .9s;
-  }
-  &:focus {
-    height: 100px;
+.user-input {
+  position: relative;
+  display: flex;
+  transition: all 0.3s;
+  textarea {
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
     transition: height 0.3s;
+    padding: 6px;
+    border-radius: 6px;
+    outline: none;
+    resize: none;
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 20px;
+    &:not(:focus) {
+      height: 35px;
+      transition: height .9s;
+    }
+    &:focus {
+      height: 100px;
+      transition: height 0.3s;
+    }
+  }
+  .robot-send {
+    position: absolute;
+    transition: all 0.3s;
+    right: 12px;
+   // top: 50%;
+    bottom: 0;
+    transform: translateY(-50%);
+    background-color: rebeccapurple;
   }
 }
+.user-input:has(textarea:focus) .robot-send {
+  background-color: rebeccapurple;
+  bottom: 0;
+  top: unset;
+  transform: translateY(-50%);
+}
+.user-input:has(textarea:not(:focus)) .robot-send {
+  // background-color: rebeccapurple;
+  // bottom: unset;
+  // top: 50%;
+  // transform: translateY(-50%);
+}
+
 </style>
