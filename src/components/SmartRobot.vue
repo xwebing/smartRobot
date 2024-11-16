@@ -45,7 +45,7 @@ function scrollToButtom() {
   box-sizing: border-box;
   z-index: 1000;
   background-color: #fff;
-  width: 400px;
+  width: 600px;
   height: 100vh;
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.72);
   display: flex;
