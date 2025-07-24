@@ -20,7 +20,7 @@ const cityData = [
 
   { id: 14, pid: 0, name: '上海市' },
   { id: 15, pid: 14, name: '浦东区' },
-  { id: 16, pid: 15, name: '迷人街道' }
+  { id: 16, pid: 15, name: '迷人街道' },
 ]
 
 // 扁平数据转树形结构-方案1
@@ -51,7 +51,7 @@ const treeDataSearch1 = (arr = [], str = '') => {
         if (res?.length) {
           const obj = {
             ...item,
-            child: res
+            child: res,
           }
           result.push(obj)
         }

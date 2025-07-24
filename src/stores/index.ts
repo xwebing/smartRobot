@@ -59,3 +59,25 @@ export const useRobotMsgStore = defineStore('robotMsg', () => {
 // step8: 流式输出
 // step9: 内容分类：text、table、code、chart
 // step10: 代码高亮
+// step11: 表格
+// step12: 图表
+// step13: 代码块
+// step14: 算法、数据结构、设计模式、设计模式的应用  【设计模式】 【数据结构】 【算法】 【设计模式的应用】
+
+export const useRobotTempStore = defineStore('robotMsg', () => {
+  const userTemp = [
+    {
+      id: 1,
+      value: '我需要会计期【19980102】，到期时间为【20000102】，付款公司为【0021】发票数据，发票号码为【123456789012345678】请帮我生成',
+      label: '模板1',
+    },
+    {
+      id: 2,
+      value: '我需要日期为【20000101、20000102】的报表，指标为【A1、A2】，岗位是月上【程序员、算法】，请帮我生成',
+      label: '模板2',
+    },
+  ]
+  const showDiaolog = ref(false)
+  const userChecked = ref<number[]>([])
+  return {showDiaolog, userChecked }
+})

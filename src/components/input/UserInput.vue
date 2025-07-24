@@ -8,11 +8,14 @@
       class="user-input-textarea"
     ></textarea> -->
 
-    <select v-model="userTempSelect" @change="userTempSelectChange">
+    <!-- <select v-model="userTempSelect" @change="userTempSelectChange">
       <option v-for="item in userTempSelectList" :key="item.id" :value="item.value">
         {{ item.label }}
       </option>
-    </select>
+    </select> -->
+    <div class="chat-new">
+      <button @click="btnNewChat">新建会话</button>
+    </div>
     <!-- 可以让编辑区域只能键入纯文本
     <div contenteditable="plaintext-only"></div> -->
     <div
@@ -24,7 +27,7 @@
       @input="onInput"
       @compositionend="onCompositionend"
       @paste="onPaste"
-      :contenteditable="contenteditableIsTemp"
+      contenteditable="true"
       placeholder="输入内容哈哈"
       :class="{ 'input-focus': inputDivLength > 0 }"
     >
@@ -83,6 +86,38 @@ const btnSend = async () => {
   emit('scrollToButtom')
 }
 
+const getLastItemTop = () => {
+  const itemTotal = document.querySelectorAll('.content .chat')
+  const lastItem = itemTotal[itemTotal.length - 1]
+  return lastItem.getBoundingClientRect().top
+}
+const btnNewChat = async () => {
+  store.robotMsgFnPush(store.HelloWord)
+  await nextTick()
+  // const allItemHeight = getAllItemTotalHeight()
+  // const scrollHeight = props.refChatMessage.scrollHeight
+  const lastTop = getLastItemTop()
+  props.refChatMessage.getAnimations().forEach((ani) => ani.cancel())
+  const domAni = props.refChatMessage.animate(
+    [
+      {
+        transform: 'translateY(0px)',
+      },
+      {
+        transform: `translateY(-${lastTop - 48 - 12}px)`,
+      },
+    ],
+    {
+      duration: 500,
+      // fill: 'forwards'
+    },
+  )
+  domAni.finished.then(() => {
+    nextTick(() => {
+      store.clearMsg()
+    })
+  })
+}
 const refInputDiv = ref()
 const maxlength = ref(200)
 const inputDivLength = ref(0)
@@ -269,8 +304,10 @@ const userTempSelectList = reactive([
     //   '<span contenteditable="false">我需要会计期为【<span placeholder="1" contenteditable="true"></span>】的报表，指标为【<span placeholder="1" contenteditable="true"></span>】请帮我生成</span>&#8203;',
     // value:
     //   '<span contenteditable="false">我需要会计期为【<span placeholder="1" contenteditable="true"></span>】的报表，指标为【<span placeholder="1" contenteditable="true"></span>】请帮我生成</span>&nbsp;',
+    // value:
+    //   '<span contenteditable="false">我需要会计期为【<span placeholder="20000101" contenteditable="true"></span>】的报表，指标为【<span placeholder="20000102" contenteditable="true"></span>】请帮我生成</span>&#8203;',
     value:
-      '<span contenteditable="false">我需要会计期为【<span placeholder="1" contenteditable="true"></span>】的报表，指标为【<span placeholder="1" contenteditable="true"></span>】请帮我生成</span>&#8203;',
+      '我需要会计期【19980102】，到期时间为【20000102】，付款公司为【0021】发票数据，发票号码为【123456789012345678】请帮我生成',
     label: '模板1',
   },
   // {
@@ -283,8 +320,9 @@ const userTempSelectList = reactive([
     id: 2,
     // value:
     //   '<span contenteditable="false">我需要日期为【<span placeholder="1" contenteditable="true"></span>】的报表，指标为【<span placeholder="A1" contenteditable="true"></span>】请帮我生成</span>&#8203;',
-    value:
-      '<span contenteditable="false">我需要日期为【<span placeholder="1" contenteditable="true"></span>】的报表，指标为【<span placeholder="A1" contenteditable="true"></span>】请帮我生成</span>&#8203;',
+    // value:
+    //   '<span contenteditable="false">我需要日期为【<span placeholder="1" contenteditable="true"></span>】的报表，指标为【<span placeholder="A1" contenteditable="true"></span>】请帮我生成</span>&#8203;',
+    value: '我需要查看【19980102】的报表，指标为【A1】请帮我生成',
     label: '模板2',
   },
 ])
@@ -292,11 +330,17 @@ const userTempSelectChange = () => {
   console.log(userTempSelect.value)
   // contenteditableIsTemp.value = false
   const $input = refInputDiv.value
-  refInputDiv.value.innerHTML =
-    $input.innerText.length > 0
-      ? `${refInputDiv.value.innerHTML}<br>${userTempSelect.value}`
-      : `${userTempSelect.value}`
-  inputDivLength.value = refInputDiv.value.innerText.length
+  // refInputDiv.value.innerHTML =
+  //   $input.innerText.length > 0
+  //     ? `${refInputDiv.value.innerHTML}<br>${userTempSelect.value}`
+  //   : `${userTempSelect.value}`
+  // inputDivLength.value = refInputDiv.value.innerText.length
+
+  const temp = userTempSelect.value.replace(
+    /【(.*?)】/g,
+    '【<span contenteditable="true" placeholder="$1"></span>】',
+  )
+  refInputDiv.value.innerHTML = `<um contenteditable="false">${temp}</span>`
 }
 </script>
 <style lang="less" scoped>
@@ -379,8 +423,10 @@ const userTempSelectChange = () => {
     font-size: 14px;
     color: gray;
   }
-  ::v-deep span {
+  ::v-deep(span) {
+    display: inline-flex;
     outline: none;
+    cursor: text;
     &:empty::before {
       content: attr(placeholder);
       color: gray;
@@ -409,6 +455,25 @@ const userTempSelectChange = () => {
     &.red {
       color: #f56c6c;
     }
+  }
+}
+
+.chat-new {
+  font-size: 12px;
+  margin-right: 6px;
+  button {
+    border: 1px solid #42b983;
+    height: 100%;
+    background-color: aquamarine;
+    box-sizing: border-box;
+    padding: 30px;
+    width: 24px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
   }
 }
 </style>
